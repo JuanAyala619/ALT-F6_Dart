@@ -34,6 +34,12 @@ reserved = {
     "Set": "SET",
     "print": "PRINT",
     #fin aporte Juan Ayala
+    #Inicio aporte Marcia Torres (marciatorresg): external - on
+
+    #fin aporte Marcia Torres
+    #Inicio aporte Mathias Giler (matheoglg): operator - yield
+
+    #fin aporte Mathias Giler
 }
 # List of token names. This is always required
 tokens = (
@@ -63,8 +69,12 @@ t_CORCHETE_IZQ = r'\['
 t_CORCHETE_DER = r'\]'
 t_FLECHA = r'=>'
 #Fin aporte Juan Ayala
+#Inicio aporte Marcia Torres: Cadenas
 
+#fin aporte Marcia Torres
+#Inicio aporte Mathias Giler: comentarios
 
+#fin aporte Mathias Giler
 #Inicio aporte Juan Ayala: ID y números
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
@@ -81,3 +91,9 @@ def t_ENTERO(t):
     t.value = int(t.value)
     return t
 #Fin aporte Juan Ayala
+#Inicio aporte Marcia Torres: relacionales, lógicos, asignación y llaves
+
+#fin aporte Marcia Torres
+#Inicio aporte Mathias Giler: delimitadores, newline, ignore, errors y construcción lexer
+
+#fin aporte Mathias Giler
