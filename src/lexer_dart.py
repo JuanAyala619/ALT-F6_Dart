@@ -35,7 +35,28 @@ reserved = {
     "print": "PRINT",
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres (marciatorresg): external - on
-
+    "external": "EXTERNAL",
+    "factory": "FACTORY",
+    "false": "FALSE",
+    "final": "FINAL",
+    "finally": "FINALLY",
+    "for": "FOR",
+    "Function": "FUNCTION",
+    "get": "GET",
+    "hide": "HIDE",
+    "if": "IF",
+    "implements": "IMPLEMENTS",
+    "import": "IMPORT",
+    "in": "IN",
+    "interface": "INTERFACE",
+    "is": "IS",
+    "late": "LATE",
+    "library": "LIBRARY",
+    "mixin": "MIXIN",
+    "new": "NEW",
+    "null": "NULL",
+    "of": "OF",
+    "on": "ON",
     #fin aporte Marcia Torres
     #Inicio aporte Mathias Giler (matheoglg): operator - yield
     "operator": "OPERATOR",
