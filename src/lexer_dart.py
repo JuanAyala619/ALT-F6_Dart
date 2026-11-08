@@ -138,4 +138,19 @@ t_COMA = r','
 t_PUNTO = r'\.'
 t_DOS_PUNTOS = r':'
 t_SIGNO_PREGUNTA = r'\?'
+
+errors = []
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
+t_ignore = ' \t\r'
+
+def t_error(t):
+    print(f"Error léxico en línea {t.lexer.lineno}: carácter '{t.value[0]}' no reconocido")
+    errors.append((t.lexer.lineno, t.value[0]))
+    t.lexer.skip(1)
+
+lexer = lex.lex()
 #fin aporte Mathias Giler
