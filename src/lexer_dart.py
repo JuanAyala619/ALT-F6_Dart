@@ -161,7 +161,24 @@ def t_ENTERO(t):
     return t
 #Fin aporte Juan Ayala
 #Inicio aporte Marcia Torres: relacionales, lógicos, asignación y llaves
+# PLY ordena las reglas definidas como string de la más larga a la más corta,
+# por eso >=, <=, ==, !=, && y ??= se reconocen antes que sus prefijos.
+t_MENOR_QUE = r'<'
+t_MAYOR_QUE = r'>'
+t_MENOR_IGUAL = r'<='
+t_MAYOR_IGUAL = r'>='
+t_IGUAL = r'=='
+t_DIFERENTE = r'!='
 
+t_NOT = r'!'
+t_AND = r'&&'
+t_OR = r'\|\|'
+
+t_ASIGNACION = r'='
+t_ASIGNACION_NULL = r'\?\?='
+
+t_LLAVE_IZQ = r'\{'
+t_LLAVE_DER = r'\}'
 #fin aporte Marcia Torres
 
 #Inicio aporte Mathias Giler: delimitadores, newline, ignore, errors y construcción lexer
