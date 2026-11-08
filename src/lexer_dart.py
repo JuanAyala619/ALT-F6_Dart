@@ -38,7 +38,30 @@ reserved = {
 
     #fin aporte Marcia Torres
     #Inicio aporte Mathias Giler (matheoglg): operator - yield
-
+    "operator": "OPERATOR",
+    "part": "PART",
+    "required": "REQUIRED",
+    "rethrow": "RETHROW",
+    "return": "RETURN",
+    "sealed": "SEALED",
+    "set": "SETTER",
+    "show": "SHOW",
+    "static": "STATIC",
+    "super": "SUPER",
+    "switch": "SWITCH",
+    "sync": "SYNC",
+    "this": "THIS",
+    "throw": "THROW",
+    "true": "TRUE",
+    "try": "TRY",
+    "type": "TYPE",
+    "typedef": "TYPEDEF",
+    "var": "VAR",
+    "void": "VOID",
+    "when": "WHEN",
+    "with": "WITH",
+    "while": "WHILE",
+    "yield": "YIELD",
     #fin aporte Mathias Giler
 }
 # List of token names. This is always required
@@ -72,9 +95,21 @@ t_FLECHA = r'=>'
 #Inicio aporte Marcia Torres: Cadenas
 
 #fin aporte Marcia Torres
-#Inicio aporte Mathias Giler: comentarios
 
+#Inicio aporte Mathias Giler: comentarios
+def t_COMENTARIO_DOC(t):
+    r'///[^\n]*'
+    pass
+
+def t_COMENTARIO_LINEA(t):
+    r'//[^\n]*'
+    pass
+
+def t_COMENTARIO_BLOQUE(t):
+    r'/\*(.|\n)*?\*/'
+    t.lexer.lineno += t.value.count('\n')
 #fin aporte Mathias Giler
+
 #Inicio aporte Juan Ayala: ID y números
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
@@ -94,6 +129,28 @@ def t_ENTERO(t):
 #Inicio aporte Marcia Torres: relacionales, lógicos, asignación y llaves
 
 #fin aporte Marcia Torres
-#Inicio aporte Mathias Giler: delimitadores, newline, ignore, errors y construcción lexer
 
+#Inicio aporte Mathias Giler: delimitadores, newline, ignore, errors y construcción lexer
+t_PARENTESIS_IZQ = r'\('
+t_PARENTESIS_DER = r'\)'
+t_PUNTO_COMA = r';'
+t_COMA = r','
+t_PUNTO = r'\.'
+t_DOS_PUNTOS = r':'
+t_SIGNO_PREGUNTA = r'\?'
+
+errors = []
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
+t_ignore = ' \t\r'
+
+def t_error(t):
+    print(f"Error léxico en línea {t.lexer.lineno}: carácter '{t.value[0]}' no reconocido")
+    errors.append((t.lexer.lineno, t.value[0]))
+    t.lexer.skip(1)
+
+lexer = lex.lex()
 #fin aporte Mathias Giler
