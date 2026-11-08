@@ -1,5 +1,6 @@
 #Formato base
 import ply.lex as lex
+from ply.lex import TOKEN
 
 reserved = {
     #Inicio aporte Juan Ayala (JuanAyala619): abstract - extension
@@ -114,7 +115,19 @@ t_CORCHETE_DER = r'\]'
 t_FLECHA = r'=>'
 #Fin aporte Juan Ayala
 #Inicio aporte Marcia Torres: Cadenas
+# Una sola regla para todos los tipos de cadena. Las triples van primero
+# en la alternación para que no se lean como cadena simple vacía + otra cadena.
+# Las interpolaciones $var y ${...} quedan dentro del valor de CADENA.
+_simple_sq = r"'(?:\\.|\$\{[^}\n]*\}|[^'\\\n])*'"
+_simple_dq = r'"(?:\\.|\$\{[^}\n]*\}|[^"\\\n])*"'
+_triple_sq = r"'''[\s\S]*?'''"
+_triple_dq = r'"""[\s\S]*?"""'
+_raw = r"r(?:'''[\s\S]*?'''|\"\"\"[\s\S]*?\"\"\"|'[^'\n]*'|\"[^\"\n]*\")"
 
+@TOKEN('|'.join([_raw, _triple_sq, _triple_dq, _simple_sq, _simple_dq]))
+def t_CADENA(t):
+    t.lexer.lineno += t.value.count('\n')
+    return t
 #fin aporte Marcia Torres
 
 #Inicio aporte Mathias Giler: comentarios
