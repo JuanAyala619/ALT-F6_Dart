@@ -129,6 +129,13 @@ def t_ENTERO(t):
 #Inicio aporte Marcia Torres: relacionales, lógicos, asignación y llaves
 
 #fin aporte Marcia Torres
-#Inicio aporte Mathias Giler: delimitadores, newline, ignore, errors y construcción lexer
 
+#Inicio aporte Mathias Giler: delimitadores, newline, ignore, errors y construcción lexer
+t_PARENTESIS_IZQ = r'\('
+t_PARENTESIS_DER = r'\)'
+t_PUNTO_COMA = r';'
+t_COMA = r','
+t_PUNTO = r'\.'
+t_DOS_PUNTOS = r':'
+t_SIGNO_PREGUNTA = r'\?'
 #fin aporte Mathias Giler
