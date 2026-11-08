@@ -95,9 +95,21 @@ t_FLECHA = r'=>'
 #Inicio aporte Marcia Torres: Cadenas
 
 #fin aporte Marcia Torres
-#Inicio aporte Mathias Giler: comentarios
 
+#Inicio aporte Mathias Giler: comentarios
+def t_COMENTARIO_DOC(t):
+    r'///[^\n]*'
+    pass
+
+def t_COMENTARIO_LINEA(t):
+    r'//[^\n]*'
+    pass
+
+def t_COMENTARIO_BLOQUE(t):
+    r'/\*(.|\n)*?\*/'
+    t.lexer.lineno += t.value.count('\n')
 #fin aporte Mathias Giler
+
 #Inicio aporte Juan Ayala: ID y números
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
