@@ -38,7 +38,30 @@ reserved = {
 
     #fin aporte Marcia Torres
     #Inicio aporte Mathias Giler (matheoglg): operator - yield
-
+    "operator": "OPERATOR",
+    "part": "PART",
+    "required": "REQUIRED",
+    "rethrow": "RETHROW",
+    "return": "RETURN",
+    "sealed": "SEALED",
+    "set": "SETTER",
+    "show": "SHOW",
+    "static": "STATIC",
+    "super": "SUPER",
+    "switch": "SWITCH",
+    "sync": "SYNC",
+    "this": "THIS",
+    "throw": "THROW",
+    "true": "TRUE",
+    "try": "TRY",
+    "type": "TYPE",
+    "typedef": "TYPEDEF",
+    "var": "VAR",
+    "void": "VOID",
+    "when": "WHEN",
+    "with": "WITH",
+    "while": "WHILE",
+    "yield": "YIELD",
     #fin aporte Mathias Giler
 }
 # List of token names. This is always required
