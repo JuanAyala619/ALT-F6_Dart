@@ -1,3 +1,5 @@
+// Algoritmo de prueba - Juan Ayala
+// Cubre: while, listas, lambda, tipado explícito, aritméticos y relacionales
 int duplicar(int n) => n * 2;
 
 void main() {
