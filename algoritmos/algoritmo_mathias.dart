@@ -26,5 +26,11 @@ void main() {
   print("Área aproximada: $areaEntera");
 
   String? apellido = null;
+  apellido ??= "Giler";
   print(apellido);
+
+  // División entera y residuo
+  int mitad = limite ~/ 2;
+  int sobra = limite % 2;
+  print("Mitad: $mitad, sobra: $sobra");
 }
