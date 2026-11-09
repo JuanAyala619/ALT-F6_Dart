@@ -1,5 +1,6 @@
 #Formato base
 import ply.lex as lex
+from ply.lex import TOKEN
 
 reserved = {
     #Inicio aporte Juan Ayala (JuanAyala619): abstract - extension
@@ -35,7 +36,28 @@ reserved = {
     "print": "PRINT",
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres (marciatorresg): external - on
-
+    "external": "EXTERNAL",
+    "factory": "FACTORY",
+    "false": "FALSE",
+    "final": "FINAL",
+    "finally": "FINALLY",
+    "for": "FOR",
+    "Function": "FUNCTION",
+    "get": "GET",
+    "hide": "HIDE",
+    "if": "IF",
+    "implements": "IMPLEMENTS",
+    "import": "IMPORT",
+    "in": "IN",
+    "interface": "INTERFACE",
+    "is": "IS",
+    "late": "LATE",
+    "library": "LIBRARY",
+    "mixin": "MIXIN",
+    "new": "NEW",
+    "null": "NULL",
+    "of": "OF",
+    "on": "ON",
     #fin aporte Marcia Torres
     #Inicio aporte Mathias Giler (matheoglg): operator - yield
     "operator": "OPERATOR",
@@ -93,7 +115,19 @@ t_CORCHETE_DER = r'\]'
 t_FLECHA = r'=>'
 #Fin aporte Juan Ayala
 #Inicio aporte Marcia Torres: Cadenas
+# Una sola regla para todos los tipos de cadena. Las triples van primero
+# en la alternación para que no se lean como cadena simple vacía + otra cadena.
+# Las interpolaciones $var y ${...} quedan dentro del valor de CADENA.
+_simple_sq = r"'(?:\\.|\$\{[^}\n]*\}|[^'\\\n])*'"
+_simple_dq = r'"(?:\\.|\$\{[^}\n]*\}|[^"\\\n])*"'
+_triple_sq = r"'''[\s\S]*?'''"
+_triple_dq = r'"""[\s\S]*?"""'
+_raw = r"r(?:'''[\s\S]*?'''|\"\"\"[\s\S]*?\"\"\"|'[^'\n]*'|\"[^\"\n]*\")"
 
+@TOKEN('|'.join([_raw, _triple_sq, _triple_dq, _simple_sq, _simple_dq]))
+def t_CADENA(t):
+    t.lexer.lineno += t.value.count('\n')
+    return t
 #fin aporte Marcia Torres
 
 #Inicio aporte Mathias Giler: comentarios
@@ -127,7 +161,24 @@ def t_ENTERO(t):
     return t
 #Fin aporte Juan Ayala
 #Inicio aporte Marcia Torres: relacionales, lógicos, asignación y llaves
+# PLY ordena las reglas definidas como string de la más larga a la más corta,
+# por eso >=, <=, ==, !=, && y ??= se reconocen antes que sus prefijos.
+t_MENOR_QUE = r'<'
+t_MAYOR_QUE = r'>'
+t_MENOR_IGUAL = r'<='
+t_MAYOR_IGUAL = r'>='
+t_IGUAL = r'=='
+t_DIFERENTE = r'!='
 
+t_NOT = r'!'
+t_AND = r'&&'
+t_OR = r'\|\|'
+
+t_ASIGNACION = r'='
+t_ASIGNACION_NULL = r'\?\?='
+
+t_LLAVE_IZQ = r'\{'
+t_LLAVE_DER = r'\}'
 #fin aporte Marcia Torres
 
 #Inicio aporte Mathias Giler: delimitadores, newline, ignore, errors y construcción lexer
