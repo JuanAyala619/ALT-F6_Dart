@@ -112,7 +112,25 @@ def p_bucle_while(p):
     #fin aporte Marcia Torres
 
     #Inicio aporte Mathias Giler: Bucle for
+def p_declaracion_bucle_for(p):
+    '''declaracion : bucle_for'''
 
+def p_bucle_for(p):
+    '''bucle_for : FOR PARENTESIS_IZQ for_control PARENTESIS_DER cuerpo_base'''
+
+# Las tres partes del paréntesis, separadas por ';'
+def p_for_control(p):
+    '''for_control : for_inicio PUNTO_COMA expresion PUNTO_COMA for_actualizacion'''
+
+def p_for_inicio(p):
+    '''for_inicio : tipo ID ASIGNACION expresion
+                  | VAR ID ASIGNACION expresion
+                  | ID ASIGNACION expresion'''
+
+def p_for_actualizacion(p):
+    '''for_actualizacion : ID INCREMENTO
+                         | ID DECREMENTO
+                         | ID ASIGNACION expresion'''
     #fin aporte Mathias Giler
 #Estructuras de datos
     #Inicio aporte Juan Ayala: Listas
