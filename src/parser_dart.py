@@ -137,7 +137,15 @@ def p_bucle_while(p):
     '''bucle_while : WHILE PARENTESIS_IZQ expresion PARENTESIS_DER cuerpo_base'''
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres: if-else
+# Regla: if / else if / else
+#   if ([condición]) { ... } else if ([condición]) { ... } else { ... }
+def p_declaracion_condicional(p):
+    '''declaracion : condicional_if'''
 
+def p_condicional_if(p):
+    '''condicional_if : IF PARENTESIS_IZQ expresion PARENTESIS_DER cuerpo_base
+                      | IF PARENTESIS_IZQ expresion PARENTESIS_DER cuerpo_base ELSE cuerpo_base
+                      | IF PARENTESIS_IZQ expresion PARENTESIS_DER cuerpo_base ELSE condicional_if'''
     #fin aporte Marcia Torres
 
     #Inicio aporte Mathias Giler: Bucle for
