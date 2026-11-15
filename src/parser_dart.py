@@ -197,7 +197,18 @@ def p_expresion_llamada_funcion(p):
                  | ID PARENTESIS_IZQ PARENTESIS_DER'''
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres: Función con retorno
+# Regla: función con retorno
+#   [tipo] [nombre]([parámetros]) { ... return [valor]; }
+# Reutiliza tipado_comun (tipo, nombre y parámetros) que definió Juan para la lambda
+def p_declaracion_funcion_retorno(p):
+    '''declaracion : funcion_retorno'''
 
+def p_funcion_retorno(p):
+    '''funcion_retorno : tipado_comun cuerpo_base'''
+
+def p_declaracion_return(p):
+    '''declaracion : RETURN expresion PUNTO_COMA
+                   | RETURN PUNTO_COMA'''
     #fin aporte Marcia Torres
     #Inicio aporte Mathias Giler: Función sin retorno
 
