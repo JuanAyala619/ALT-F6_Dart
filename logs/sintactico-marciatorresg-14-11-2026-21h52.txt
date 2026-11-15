@@ -1,0 +1,9 @@
+Archivo: algoritmos/algoritmo_marcia_sintactico_errores.dart
+Usuario: marciatorresg
+
+Error de sintaxis en línea 20: token inesperado 'var'
+Error de sintaxis en línea 36: token inesperado '{'
+Error de sintaxis en línea 38: token inesperado '}'
+Error de sintaxis en línea 55: token inesperado '}'
+
+Errores sintácticos: 4

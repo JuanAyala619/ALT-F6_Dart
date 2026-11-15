@@ -59,7 +59,24 @@ def p_tipado_explicito(p):
                         | tipo ID PUNTO_COMA'''
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres (marciatorresg): Tipado inferido
+# Regla: declaración con tipado inferido
+#   var [nombre] = [valor];
+def p_declaracion_tipado_inferido(p):
+    '''declaracion : tipado_inferido'''
 
+def p_tipado_inferido(p):
+    '''tipado_inferido : VAR ID ASIGNACION expresion PUNTO_COMA
+                       | VAR ID PUNTO_COMA'''
+
+# Regla: declaración con inicialización tardía
+#   late [tipo] [nombre];
+def p_declaracion_late(p):
+    '''declaracion : LATE tipo ID PUNTO_COMA'''
+
+# Regla: asignación si es null
+#   [nombre] ??= [valor];
+def p_asignacion_null(p):
+    '''asignacion : ID ASIGNACION_NULL expresion PUNTO_COMA'''
     #fin aporte Marcia Torres
 
 #Inicio aporte Mathias Giler (matheoglg): Constante en tiempo de compilación
@@ -97,7 +114,26 @@ def p_incremento_o_decremento(p):
 #fin aporte Juan Ayala
 
 #Inicio aporte Marcia Torres: Expresiones booleanas
+# Regla: expresiones booleanas con operadores relacionales y de igualdad
+#   [valor_1] (< > <= >= == !=) [valor_2]
+def p_expresion_relacional(p):
+    '''expresion : expresion MENOR_QUE expresion
+                 | expresion MAYOR_QUE expresion
+                 | expresion MENOR_IGUAL expresion
+                 | expresion MAYOR_IGUAL expresion
+                 | expresion IGUAL expresion
+                 | expresion DIFERENTE expresion'''
 
+# Regla: conectores lógicos (uno o más)
+#   [condición_1] && [condición_2] || [condición_3]
+def p_expresion_logica(p):
+    '''expresion : expresion AND expresion
+                 | expresion OR expresion'''
+
+# Regla: negación
+#   ![condición]
+def p_expresion_not(p):
+    '''expresion : NOT expresion'''
 #fin aporte Marcia Torres
 
 #Estructuras de Control
@@ -108,7 +144,15 @@ def p_bucle_while(p):
     '''bucle_while : WHILE PARENTESIS_IZQ expresion PARENTESIS_DER cuerpo_base'''
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres: if-else
+# Regla: if / else if / else
+#   if ([condición]) { ... } else if ([condición]) { ... } else { ... }
+def p_declaracion_condicional(p):
+    '''declaracion : condicional_if'''
 
+def p_condicional_if(p):
+    '''condicional_if : IF PARENTESIS_IZQ expresion PARENTESIS_DER cuerpo_base
+                      | IF PARENTESIS_IZQ expresion PARENTESIS_DER cuerpo_base ELSE cuerpo_base
+                      | IF PARENTESIS_IZQ expresion PARENTESIS_DER cuerpo_base ELSE condicional_if'''
     #fin aporte Marcia Torres
 
     #Inicio aporte Mathias Giler: Bucle for
@@ -149,7 +193,14 @@ def p_expresion_acceso_lista(p):
 
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres: Conjuntos
+# Regla: conjuntos
+#   Set<[tipo]> [nombre] = {[valor_1], [valor_2], ...};
+def p_declaracion_conjunto(p):
+    '''declaracion : conjunto'''
 
+def p_conjunto(p):
+    '''conjunto : SET MENOR_QUE tipo MAYOR_QUE ID ASIGNACION LLAVE_IZQ elementos LLAVE_DER PUNTO_COMA
+                | SET MENOR_QUE tipo MAYOR_QUE ID ASIGNACION LLAVE_IZQ LLAVE_DER PUNTO_COMA'''
     #fin aporte Marcia Torres
     
     #Inicio aporte Mathias Giler: Tuplas/Records
@@ -191,7 +242,18 @@ def p_expresion_llamada_funcion(p):
                  | ID PARENTESIS_IZQ PARENTESIS_DER'''
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres: Función con retorno
+# Regla: función con retorno
+#   [tipo] [nombre]([parámetros]) { ... return [valor]; }
+# Reutiliza tipado_comun (tipo, nombre y parámetros) que definió Juan para la lambda
+def p_declaracion_funcion_retorno(p):
+    '''declaracion : funcion_retorno'''
 
+def p_funcion_retorno(p):
+    '''funcion_retorno : tipado_comun cuerpo_base'''
+
+def p_declaracion_return(p):
+    '''declaracion : RETURN expresion PUNTO_COMA
+                   | RETURN PUNTO_COMA'''
     #fin aporte Marcia Torres
 
     #Inicio aporte Mathias Giler: Función sin retorno
@@ -239,4 +301,46 @@ def p_tipo_nullable(p):
 def p_expresion_null(p):
     '''expresion : NULL'''
     #fin aporte Mathias Giler
-parser = yacc.yacc()   
+
+#Inicio aporte Marcia Torres: Clases, propiedades y métodos
+# Regla: definición de clase
+#   class [Nombre] { [propiedades] [constructor] [métodos] }
+def p_declaracion_clase(p):
+    '''declaracion : clase'''
+
+def p_clase(p):
+    '''clase : CLASS ID LLAVE_IZQ miembros LLAVE_DER
+             | CLASS ID LLAVE_IZQ LLAVE_DER'''
+
+def p_miembros(p):
+    '''miembros : miembro
+                | miembros miembro'''
+
+# Propiedades (como una declaración con tipo) y métodos (cualquier tipo de función)
+def p_miembro(p):
+    '''miembro : tipado_explicito
+               | funcion_retorno
+               | lambda
+               | funcion_void
+               | constructor'''
+
+# Regla: constructor
+#   [Nombre](this.[propiedad], ...);
+def p_constructor(p):
+    '''constructor : ID PARENTESIS_IZQ parametros_constructor PARENTESIS_DER PUNTO_COMA
+                   | ID PARENTESIS_IZQ PARENTESIS_DER PUNTO_COMA'''
+
+def p_parametros_constructor(p):
+    '''parametros_constructor : THIS PUNTO ID
+                              | parametros_constructor COMA THIS PUNTO ID'''
+
+# Acceso a una propiedad dentro de la clase: this.[propiedad]
+def p_expresion_this(p):
+    '''expresion : THIS PUNTO ID'''
+
+# Regla: crear un objeto de una clase
+#   [Clase] [nombre] = [Clase]([argumentos]);
+def p_declaracion_objeto(p):
+    '''declaracion : ID ID ASIGNACION expresion PUNTO_COMA'''
+#fin aporte Marcia Torres
+parser = yacc.yacc()
