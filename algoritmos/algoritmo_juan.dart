@@ -1,4 +1,4 @@
-// Algoritmo de prueba - Juan Ayala
+// Algoritmo de prueba léxico - Juan Ayala
 // Cubre: while, listas, lambda, tipado explícito, aritméticos y relacionales
 int duplicar(int n) => n * 2;
 

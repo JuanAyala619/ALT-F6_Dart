@@ -1,0 +1,9 @@
+Archivo: algoritmos/algoritmo_juan_2_errores.dart
+Usuario: JuanAyala619
+
+Error de sintaxis en línea 4: token inesperado 'int'
+Error de sintaxis en línea 5: token inesperado ';'
+Error de sintaxis en línea 6: token inesperado ';'
+Error de sintaxis en línea 7: token inesperado '['
+
+Errores sintácticos: 4
