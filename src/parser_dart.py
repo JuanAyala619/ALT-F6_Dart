@@ -301,4 +301,46 @@ def p_tipo_nullable(p):
 def p_expresion_null(p):
     '''expresion : NULL'''
     #fin aporte Mathias Giler
-parser = yacc.yacc()   
+
+#Inicio aporte Marcia Torres: Clases, propiedades y métodos
+# Regla: definición de clase
+#   class [Nombre] { [propiedades] [constructor] [métodos] }
+def p_declaracion_clase(p):
+    '''declaracion : clase'''
+
+def p_clase(p):
+    '''clase : CLASS ID LLAVE_IZQ miembros LLAVE_DER
+             | CLASS ID LLAVE_IZQ LLAVE_DER'''
+
+def p_miembros(p):
+    '''miembros : miembro
+                | miembros miembro'''
+
+# Propiedades (como una declaración con tipo) y métodos (cualquier tipo de función)
+def p_miembro(p):
+    '''miembro : tipado_explicito
+               | funcion_retorno
+               | lambda
+               | funcion_void
+               | constructor'''
+
+# Regla: constructor
+#   [Nombre](this.[propiedad], ...);
+def p_constructor(p):
+    '''constructor : ID PARENTESIS_IZQ parametros_constructor PARENTESIS_DER PUNTO_COMA
+                   | ID PARENTESIS_IZQ PARENTESIS_DER PUNTO_COMA'''
+
+def p_parametros_constructor(p):
+    '''parametros_constructor : THIS PUNTO ID
+                              | parametros_constructor COMA THIS PUNTO ID'''
+
+# Acceso a una propiedad dentro de la clase: this.[propiedad]
+def p_expresion_this(p):
+    '''expresion : THIS PUNTO ID'''
+
+# Regla: crear un objeto de una clase
+#   [Clase] [nombre] = [Clase]([argumentos]);
+def p_declaracion_objeto(p):
+    '''declaracion : ID ID ASIGNACION expresion PUNTO_COMA'''
+#fin aporte Marcia Torres
+parser = yacc.yacc()
