@@ -2,6 +2,7 @@
 //Cubre: tipado explícito, aritméticas, listas, while y lambda
 int duplicar(int n) => n * 2;
 int sumar(int a, int b) => a + b;
+int negativo = -4;
 
 List<int> numeros = [1, 2, 3, 4];
 List<int> vacia = [];
