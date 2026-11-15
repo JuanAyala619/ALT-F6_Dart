@@ -59,7 +59,24 @@ def p_tipado_explicito(p):
                         | tipo ID PUNTO_COMA'''
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres (marciatorresg): Tipado inferido
+# Regla: declaración con tipado inferido
+#   var [nombre] = [valor];
+def p_declaracion_tipado_inferido(p):
+    '''declaracion : tipado_inferido'''
 
+def p_tipado_inferido(p):
+    '''tipado_inferido : VAR ID ASIGNACION expresion PUNTO_COMA
+                       | VAR ID PUNTO_COMA'''
+
+# Regla: declaración con inicialización tardía
+#   late [tipo] [nombre];
+def p_declaracion_late(p):
+    '''declaracion : LATE tipo ID PUNTO_COMA'''
+
+# Regla: asignación si es null
+#   [nombre] ??= [valor];
+def p_asignacion_null(p):
+    '''asignacion : ID ASIGNACION_NULL expresion PUNTO_COMA'''
     #fin aporte Marcia Torres
 
     #Inicio aporte Mathias Giler (matheoglg): Constante en tiempo de compilación
