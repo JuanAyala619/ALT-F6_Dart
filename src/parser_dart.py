@@ -151,9 +151,29 @@ def p_expresion_acceso_lista(p):
     #Inicio aporte Marcia Torres: Conjuntos
 
     #fin aporte Marcia Torres
+    
     #Inicio aporte Mathias Giler: Tuplas/Records
 
+# Regla: tuplas / records
+#   ([tipo_1], [tipo_2], ...) [nombre] = ([valor_1], [valor_2], ...);
+def p_declaracion_record(p):
+    '''declaracion : record'''
+
+def p_record(p):
+    '''record : tipo_record ID ASIGNACION expresion PUNTO_COMA'''
+
+def p_tipo_record(p):
+    '''tipo_record : PARENTESIS_IZQ tipo COMA lista_tipos PARENTESIS_DER'''
+
+def p_lista_tipos(p):
+    '''lista_tipos : tipo
+                   | lista_tipos COMA tipo'''
+
+# Valor de una tupla: necesita al menos 2 elementos; con uno solo es una expresión entre paréntesis
+def p_expresion_record(p):
+    '''expresion : PARENTESIS_IZQ expresion COMA elementos PARENTESIS_DER'''
     #fin aporte Mathias Giler
+
 #Declaraciones de funciones
     #Inicio aporte Juan Ayala: Lambda
 def p_declaracion_lambda(p):
