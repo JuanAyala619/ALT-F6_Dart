@@ -193,9 +193,27 @@ def p_expresion_llamada_funcion(p):
     #Inicio aporte Marcia Torres: Función con retorno
 
     #fin aporte Marcia Torres
-    #Inicio aporte Mathias Giler: Función sin retorno
 
+    #Inicio aporte Mathias Giler: Función sin retorno
+# Regla: función sin retorno
+def p_declaracion_funcion_void(p):
+    '''declaracion : funcion_void'''
+
+def p_funcion_void(p):
+    '''funcion_void : VOID ID PARENTESIS_IZQ parametros PARENTESIS_DER cuerpo_base
+                    | VOID ID PARENTESIS_IZQ PARENTESIS_DER cuerpo_base'''
+
+# Regla: llamada a función o método como instrucción
+def p_declaracion_llamada(p):
+    '''declaracion : expresion PUNTO_COMA'''
+
+# Regla: llamada a un método y acceso a una propiedad de un objeto
+def p_expresion_metodo(p):
+    '''expresion : expresion PUNTO ID PARENTESIS_IZQ elementos PARENTESIS_DER
+                 | expresion PUNTO ID PARENTESIS_IZQ PARENTESIS_DER
+                 | expresion PUNTO ID'''
     #fin aporte Mathias Giler
+
 #Inicio aporte Mathias Giler: Impresión, solicitud de datos
 
     #fin aporte Mathias Giler
