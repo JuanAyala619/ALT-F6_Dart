@@ -62,8 +62,15 @@ def p_tipado_explicito(p):
 
     #fin aporte Marcia Torres
 
-    #Inicio aporte Mathias Giler (matheoglg): Constante en tiempo de compilación
+#Inicio aporte Mathias Giler (matheoglg): Constante en tiempo de compilación
+def p_declaracion_constante(p):
+    '''declaracion : constante'''
 
+def p_constante(p):
+    '''constante : CONST tipo ID ASIGNACION expresion PUNTO_COMA 
+                | CONST ID ASIGNACION expresion PUNTO_COMA
+                | FINAL tipo ID ASIGNACION expresion PUNTO_COMA
+                | FINAL ID ASIGNACION expresion PUNTO_COMA'''
     #fin aporte Mathias Giler
 
 #Inicio aporte Juan Ayala: Expresiones aritméticas
@@ -105,7 +112,25 @@ def p_bucle_while(p):
     #fin aporte Marcia Torres
 
     #Inicio aporte Mathias Giler: Bucle for
+def p_declaracion_bucle_for(p):
+    '''declaracion : bucle_for'''
 
+def p_bucle_for(p):
+    '''bucle_for : FOR PARENTESIS_IZQ for_control PARENTESIS_DER cuerpo_base'''
+
+# Las tres partes del paréntesis, separadas por ';'
+def p_for_control(p):
+    '''for_control : for_inicio PUNTO_COMA expresion PUNTO_COMA for_actualizacion'''
+
+def p_for_inicio(p):
+    '''for_inicio : tipo ID ASIGNACION expresion
+                  | VAR ID ASIGNACION expresion
+                  | ID ASIGNACION expresion'''
+
+def p_for_actualizacion(p):
+    '''for_actualizacion : ID INCREMENTO
+                         | ID DECREMENTO
+                         | ID ASIGNACION expresion'''
     #fin aporte Mathias Giler
 #Estructuras de datos
     #Inicio aporte Juan Ayala: Listas
@@ -126,9 +151,29 @@ def p_expresion_acceso_lista(p):
     #Inicio aporte Marcia Torres: Conjuntos
 
     #fin aporte Marcia Torres
+    
     #Inicio aporte Mathias Giler: Tuplas/Records
 
+# Regla: tuplas / records
+#   ([tipo_1], [tipo_2], ...) [nombre] = ([valor_1], [valor_2], ...);
+def p_declaracion_record(p):
+    '''declaracion : record'''
+
+def p_record(p):
+    '''record : tipo_record ID ASIGNACION expresion PUNTO_COMA'''
+
+def p_tipo_record(p):
+    '''tipo_record : PARENTESIS_IZQ tipo COMA lista_tipos PARENTESIS_DER'''
+
+def p_lista_tipos(p):
+    '''lista_tipos : tipo
+                   | lista_tipos COMA tipo'''
+
+# Valor de una tupla: necesita al menos 2 elementos; con uno solo es una expresión entre paréntesis
+def p_expresion_record(p):
+    '''expresion : PARENTESIS_IZQ expresion COMA elementos PARENTESIS_DER'''
     #fin aporte Mathias Giler
+
 #Declaraciones de funciones
     #Inicio aporte Juan Ayala: Lambda
 def p_declaracion_lambda(p):
@@ -148,10 +193,50 @@ def p_expresion_llamada_funcion(p):
     #Inicio aporte Marcia Torres: Función con retorno
 
     #fin aporte Marcia Torres
+
     #Inicio aporte Mathias Giler: Función sin retorno
+# Regla: función sin retorno
+def p_declaracion_funcion_void(p):
+    '''declaracion : funcion_void'''
 
+def p_funcion_void(p):
+    '''funcion_void : VOID ID PARENTESIS_IZQ parametros PARENTESIS_DER cuerpo_base
+                    | VOID ID PARENTESIS_IZQ PARENTESIS_DER cuerpo_base'''
+
+# Regla: llamada a función o método como instrucción
+def p_declaracion_llamada(p):
+    '''declaracion : expresion PUNTO_COMA'''
+
+# Regla: llamada a un método y acceso a una propiedad de un objeto
+def p_expresion_metodo(p):
+    '''expresion : expresion PUNTO ID PARENTESIS_IZQ elementos PARENTESIS_DER
+                 | expresion PUNTO ID PARENTESIS_IZQ PARENTESIS_DER
+                 | expresion PUNTO ID'''
     #fin aporte Mathias Giler
-#Inicio aporte Mathias Giler: Impresión, solicitud de datos
 
+#Inicio aporte Mathias Giler: Impresión, solicitud de datos
+# Regla: impresión
+def p_declaracion_impresion(p):
+    '''declaracion : impresion'''
+
+def p_impresion(p):
+    '''impresion : PRINT PARENTESIS_IZQ expresion PARENTESIS_DER PUNTO_COMA
+                 | PRINT PARENTESIS_IZQ PARENTESIS_DER PUNTO_COMA'''
+
+# Regla: solicitud de datos por teclado
+#   import 'dart:io';
+#   String? [nombre] = stdin.readLineSync();
+def p_declaracion_import(p):
+    '''declaracion : IMPORT CADENA PUNTO_COMA'''
+
+def p_expresion_lectura(p):
+    '''expresion : STDIN PUNTO ID PARENTESIS_IZQ PARENTESIS_DER'''
+
+# Tipo que acepta null (String?, int?) y el valor null
+def p_tipo_nullable(p):
+    '''tipo : tipo SIGNO_PREGUNTA'''
+
+def p_expresion_null(p):
+    '''expresion : NULL'''
     #fin aporte Mathias Giler
 parser = yacc.yacc()   
