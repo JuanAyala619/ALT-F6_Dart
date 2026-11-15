@@ -84,6 +84,7 @@ reserved = {
     "with": "WITH",
     "while": "WHILE",
     "yield": "YIELD",
+    "stdin": "STDIN",
     #fin aporte Mathias Giler
 }
 # List of token names. This is always required
