@@ -107,7 +107,26 @@ def p_incremento_o_decremento(p):
 #fin aporte Juan Ayala
 
 #Inicio aporte Marcia Torres: Expresiones booleanas
+# Regla: expresiones booleanas con operadores relacionales y de igualdad
+#   [valor_1] (< > <= >= == !=) [valor_2]
+def p_expresion_relacional(p):
+    '''expresion : expresion MENOR_QUE expresion
+                 | expresion MAYOR_QUE expresion
+                 | expresion MENOR_IGUAL expresion
+                 | expresion MAYOR_IGUAL expresion
+                 | expresion IGUAL expresion
+                 | expresion DIFERENTE expresion'''
 
+# Regla: conectores lógicos (uno o más)
+#   [condición_1] && [condición_2] || [condición_3]
+def p_expresion_logica(p):
+    '''expresion : expresion AND expresion
+                 | expresion OR expresion'''
+
+# Regla: negación
+#   ![condición]
+def p_expresion_not(p):
+    '''expresion : NOT expresion'''
 #fin aporte Marcia Torres
 
 #Estructuras de Control
