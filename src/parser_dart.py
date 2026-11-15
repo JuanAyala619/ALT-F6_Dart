@@ -62,8 +62,15 @@ def p_tipado_explicito(p):
 
     #fin aporte Marcia Torres
 
-    #Inicio aporte Mathias Giler (matheoglg): Constante en tiempo de compilación
+#Inicio aporte Mathias Giler (matheoglg): Constante en tiempo de compilación
+def p_declaracion_constante(p):
+    '''declaracion : constante'''
 
+def p_constante(p):
+    '''constante : CONST tipo ID ASIGNACION expresion PUNTO_COMA 
+                | CONST ID ASIGNACION expresion PUNTO_COMA
+                | FINAL tipo ID ASIGNACION expresion PUNTO_COMA
+                | FINAL ID ASIGNACION expresion PUNTO_COMA'''
     #fin aporte Mathias Giler
 
 #Inicio aporte Juan Ayala: Expresiones aritméticas
