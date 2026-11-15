@@ -215,6 +215,28 @@ def p_expresion_metodo(p):
     #fin aporte Mathias Giler
 
 #Inicio aporte Mathias Giler: Impresión, solicitud de datos
+# Regla: impresión
+def p_declaracion_impresion(p):
+    '''declaracion : impresion'''
 
+def p_impresion(p):
+    '''impresion : PRINT PARENTESIS_IZQ expresion PARENTESIS_DER PUNTO_COMA
+                 | PRINT PARENTESIS_IZQ PARENTESIS_DER PUNTO_COMA'''
+
+# Regla: solicitud de datos por teclado
+#   import 'dart:io';
+#   String? [nombre] = stdin.readLineSync();
+def p_declaracion_import(p):
+    '''declaracion : IMPORT CADENA PUNTO_COMA'''
+
+def p_expresion_lectura(p):
+    '''expresion : STDIN PUNTO ID PARENTESIS_IZQ PARENTESIS_DER'''
+
+# Tipo que acepta null (String?, int?) y el valor null
+def p_tipo_nullable(p):
+    '''tipo : tipo SIGNO_PREGUNTA'''
+
+def p_expresion_null(p):
+    '''expresion : NULL'''
     #fin aporte Mathias Giler
 parser = yacc.yacc()   
