@@ -1,0 +1,8 @@
+Archivo: algoritmos/algoritmo_mathias_errores.dart
+Usuario: matheoglg
+
+Error de sintaxis en línea 4: token inesperado 'oActual'
+Error de sintaxis en línea 6: token inesperado 'es'
+Error de sintaxis en línea 12: token inesperado '}'
+
+Errores sintácticos: 3

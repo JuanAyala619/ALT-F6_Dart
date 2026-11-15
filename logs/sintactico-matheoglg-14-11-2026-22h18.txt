@@ -1,0 +1,10 @@
+Archivo: algoritmos/algoritmo_mathias_sintactico_errores.dart
+Usuario: matheoglg
+
+Error de sintaxis en línea 2: token inesperado 'void'
+Error de sintaxis en línea 4: token inesperado '}'
+Error de sintaxis en línea 6: token inesperado ')'
+Error de sintaxis en línea 8: token inesperado '}'
+Error de sintaxis en línea 9: token inesperado '"Ana"'
+
+Errores sintácticos: 5
