@@ -168,7 +168,14 @@ def p_expresion_acceso_lista(p):
 
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres: Conjuntos
+# Regla: conjuntos
+#   Set<[tipo]> [nombre] = {[valor_1], [valor_2], ...};
+def p_declaracion_conjunto(p):
+    '''declaracion : conjunto'''
 
+def p_conjunto(p):
+    '''conjunto : SET MENOR_QUE tipo MAYOR_QUE ID ASIGNACION LLAVE_IZQ elementos LLAVE_DER PUNTO_COMA
+                | SET MENOR_QUE tipo MAYOR_QUE ID ASIGNACION LLAVE_IZQ LLAVE_DER PUNTO_COMA'''
     #fin aporte Marcia Torres
     #Inicio aporte Mathias Giler: Tuplas/Records
 
