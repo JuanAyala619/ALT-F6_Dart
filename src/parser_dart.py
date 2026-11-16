@@ -135,11 +135,19 @@ def p_constante(p):
     #fin aporte Mathias Giler
 
 #Inicio aporte Juan Ayala: Expresiones aritméticas
+#Regla semántica: una variable declarada con const o final no se puede volver a asignar
+def verificar_mutable(nombre, linea):
+    simbolo = tabla_simbolos.get(nombre)
+    if simbolo and not simbolo['mutable']:
+        error_semantico(linea, 'Asignación de tipo',
+                        f"'{nombre}' es const o final y no se puede modificar")
+
 def p_declaracion_asignacion(p):
     '''declaracion : asignacion'''
 
 def p_asignacion(p):
     '''asignacion : ID ASIGNACION expresion PUNTO_COMA'''
+    verificar_mutable(p[1],p.lineno(1))
 
 def p_operacion_aritmeticas(p):
     '''operacion_aritmetica : expresion SUMA expresion
@@ -155,6 +163,7 @@ def p_declaracion_incremento_o_decremento(p):
 def p_incremento_o_decremento(p):
     '''incremento_o_decremento : ID INCREMENTO PUNTO_COMA
                                 | ID DECREMENTO PUNTO_COMA'''
+    verificar_mutable(p[1], p.lineno(1))
 #fin aporte Juan Ayala
 
 #Inicio aporte Marcia Torres: Expresiones booleanas
