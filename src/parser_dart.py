@@ -243,9 +243,9 @@ def p_expresion_acceso_lista(p):
     else:
         tipo = None
     if tipo is not None and tipo[0:5] == 'List<':
-        p = tipo[5:-1]
+        p[0]= tipo[5:-1]
     else:
-        p = None
+        p[0] = None
 
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres: Conjuntos
