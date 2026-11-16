@@ -3,6 +3,7 @@ from lexer_dart import tokens
 
 errores_sintacticos = []
 start = 'programa'
+#Inicio aporte Juan Ayala: base analizador semántico
 tabla_simbolos = {}
 tabla_funciones = {}
 pila_funciones = []
@@ -26,7 +27,7 @@ def tipo_base(tipo):
         return tipo
     else:
         return None
-
+#fin aporte Juan Ayala
 def p_programa(p):
     '''programa : declaraciones'''
 
