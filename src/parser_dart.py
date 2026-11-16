@@ -135,11 +135,19 @@ def p_constante(p):
     #fin aporte Mathias Giler
 
 #Inicio aporte Juan Ayala: Expresiones aritméticas
+#Regla semántica: una variable declarada con const o final no se puede volver a asignar
+def verificar_mutable(nombre, linea):
+    simbolo = tabla_simbolos.get(nombre)
+    if simbolo and not simbolo['mutable']:
+        error_semantico(linea, 'Asignación de tipo',
+                        f"'{nombre}' es const o final y no se puede modificar")
+
 def p_declaracion_asignacion(p):
     '''declaracion : asignacion'''
 
 def p_asignacion(p):
     '''asignacion : ID ASIGNACION expresion PUNTO_COMA'''
+    verificar_mutable(p[1],p.lineno(1))
 
 def p_operacion_aritmeticas(p):
     '''operacion_aritmetica : expresion SUMA expresion
@@ -155,6 +163,7 @@ def p_declaracion_incremento_o_decremento(p):
 def p_incremento_o_decremento(p):
     '''incremento_o_decremento : ID INCREMENTO PUNTO_COMA
                                 | ID DECREMENTO PUNTO_COMA'''
+    verificar_mutable(p[1], p.lineno(1))
 #fin aporte Juan Ayala
 
 #Inicio aporte Marcia Torres: Expresiones booleanas
@@ -182,10 +191,19 @@ def p_expresion_not(p):
 
 #Estructuras de Control
     #Inicio aporte Juan Ayala: Bucle while
+    #Regla semántica: la condición de un if o un while tiene que ser de tipo bool
+def verificar_condicion(tipo, estructura, linea):
+    tipo = tipo_base(tipo)
+    if tipo is not None and tipo != 'bool':
+        mensaje = "la condición del " + estructura + " debe ser bool, se encontró '" + tipo + "'"
+        error_semantico(linea, 'Estructuras de control', mensaje)
+
 def p_declaracion_bucle_while(p):
     '''declaracion : bucle_while'''
+
 def p_bucle_while(p):
     '''bucle_while : WHILE PARENTESIS_IZQ expresion PARENTESIS_DER cuerpo_base'''
+    verificar_condicion(p[3], 'while', p.lineno(1))
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres: if-else
 # Regla: if / else if / else
@@ -198,6 +216,8 @@ def p_condicional_if(p):
                       | IF PARENTESIS_IZQ expresion PARENTESIS_DER cuerpo_base ELSE cuerpo_base
                       | IF PARENTESIS_IZQ expresion PARENTESIS_DER cuerpo_base ELSE condicional_if'''
     #fin aporte Marcia Torres
+    #Regla semántica (Juan Ayala)
+    verificar_condicion(p[3], 'if', p.lineno(1))
 
     #Inicio aporte Mathias Giler: Bucle for
 def p_declaracion_bucle_for(p):
