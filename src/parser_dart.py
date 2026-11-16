@@ -158,6 +158,26 @@ def verificar_conversion(tipo_destino, tipo_valor, nombre, linea):
         
     #fin aporte Mathias Giler
 
+#Inicio aporte Marcia Torres: Operaciones permitidas
+# Regla semántica (Marcia Torres) - Operaciones permitidas:
+# los operandos de una operación aritmética deben ser de tipos compatibles.
+# Números con números (int y double) y, solo con +, String con String
+def tipo_operacion(operador, izq, der, linea):
+    izq, der = tipo_base(izq), tipo_base(der)
+    if izq is None or der is None:
+        return None
+    numeros = ('int', 'double')
+    if izq in numeros and der in numeros:
+        if operador == '/' or 'double' in (izq, der):
+            return 'int' if operador == '~/' else 'double'
+        return 'int'
+    if operador == '+' and izq == 'String' and der == 'String':
+        return 'String'
+    error_semantico(linea, 'Operaciones permitidas',
+                    f"no se puede aplicar '{operador}' entre '{izq}' y '{der}'")
+    return None
+#fin aporte Marcia Torres
+
 #Inicio aporte Juan Ayala: Expresiones aritméticas
 #Regla semántica: una variable declarada con const o final no se puede volver a asignar
 def verificar_mutable(nombre, linea):
@@ -180,6 +200,7 @@ def p_operacion_aritmeticas(p):
                             | expresion DIVISION expresion
                             | expresion DIV_ENTERA expresion
                             | expresion MODULO expresion'''
+    p[0] = tipo_operacion(p[2], p[1], p[3], p.lineno(2))
 
 def p_declaracion_incremento_o_decremento(p):
     '''declaracion : incremento_o_decremento'''
