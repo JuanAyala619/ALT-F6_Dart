@@ -59,6 +59,11 @@ def p_expresion_id(p):
         p[0] = simbolo['tipo']
     else:
         p[0] = None
+    # Regla semántica (Marcia Torres) - Identificadores:
+    # una variable debe estar declarada antes de usarse
+    if simbolo is None:
+        error_semantico(p.lineno(1), 'Identificadores',
+                        f"la variable '{p[1]}' se usa antes de ser declarada")
 
 def p_expresion_agrupada(p):
     '''expresion : PARENTESIS_IZQ expresion PARENTESIS_DER
@@ -115,11 +120,14 @@ def p_declaracion_tipado_inferido(p):
 def p_tipado_inferido(p):
     '''tipado_inferido : VAR ID ASIGNACION expresion PUNTO_COMA
                        | VAR ID PUNTO_COMA'''
+    # var toma el tipo del valor que se le asigna
+    declarar(p[2], p[4] if len(p) == 6 else None)
 
 # Regla: declaración con inicialización tardía
 #   late [tipo] [nombre];
 def p_declaracion_late(p):
     '''declaracion : LATE tipo ID PUNTO_COMA'''
+    declarar(p[3], p[2])
 
 # Regla: asignación si es null
 #   [nombre] ??= [valor];
@@ -150,6 +158,26 @@ def verificar_conversion(tipo_destino, tipo_valor, nombre, linea):
         
     #fin aporte Mathias Giler
 
+#Inicio aporte Marcia Torres: Operaciones permitidas
+# Regla semántica (Marcia Torres) - Operaciones permitidas:
+# los operandos de una operación aritmética deben ser de tipos compatibles.
+# Números con números (int y double) y, solo con +, String con String
+def tipo_operacion(operador, izq, der, linea):
+    izq, der = tipo_base(izq), tipo_base(der)
+    if izq is None or der is None:
+        return None
+    numeros = ('int', 'double')
+    if izq in numeros and der in numeros:
+        if operador == '/' or 'double' in (izq, der):
+            return 'int' if operador == '~/' else 'double'
+        return 'int'
+    if operador == '+' and izq == 'String' and der == 'String':
+        return 'String'
+    error_semantico(linea, 'Operaciones permitidas',
+                    f"no se puede aplicar '{operador}' entre '{izq}' y '{der}'")
+    return None
+#fin aporte Marcia Torres
+
 #Inicio aporte Juan Ayala: Expresiones aritméticas
 #Regla semántica: una variable declarada con const o final no se puede volver a asignar
 def verificar_mutable(nombre, linea):
@@ -172,6 +200,7 @@ def p_operacion_aritmeticas(p):
                             | expresion DIVISION expresion
                             | expresion DIV_ENTERA expresion
                             | expresion MODULO expresion'''
+    p[0] = tipo_operacion(p[2], p[1], p[3], p.lineno(2))
 
 def p_declaracion_incremento_o_decremento(p):
     '''declaracion : incremento_o_decremento'''
@@ -192,17 +221,20 @@ def p_expresion_relacional(p):
                  | expresion MAYOR_IGUAL expresion
                  | expresion IGUAL expresion
                  | expresion DIFERENTE expresion'''
+    p[0] = 'bool'
 
 # Regla: conectores lógicos (uno o más)
 #   [condición_1] && [condición_2] || [condición_3]
 def p_expresion_logica(p):
     '''expresion : expresion AND expresion
                  | expresion OR expresion'''
+    p[0] = 'bool'
 
 # Regla: negación
 #   ![condición]
 def p_expresion_not(p):
     '''expresion : NOT expresion'''
+    p[0] = 'bool'
 #fin aporte Marcia Torres
 
 #Estructuras de Control
@@ -296,8 +328,9 @@ def p_declaracion_conjunto(p):
 def p_conjunto(p):
     '''conjunto : SET MENOR_QUE tipo MAYOR_QUE ID ASIGNACION LLAVE_IZQ elementos LLAVE_DER PUNTO_COMA
                 | SET MENOR_QUE tipo MAYOR_QUE ID ASIGNACION LLAVE_IZQ LLAVE_DER PUNTO_COMA'''
+    declarar(p[5], f'Set<{p[3]}>')
     #fin aporte Marcia Torres
-    
+
     #Inicio aporte Mathias Giler: Tuplas/Records
 
 # Regla: tuplas / records
@@ -359,6 +392,7 @@ def p_declaracion_funcion_retorno(p):
 
 def p_funcion_retorno(p):
     '''funcion_retorno : tipado_comun cuerpo_base'''
+    pila_funciones.pop()
 
 def p_declaracion_return(p):
     '''declaracion : RETURN expresion PUNTO_COMA
@@ -471,5 +505,6 @@ def p_expresion_this(p):
 #   [Clase] [nombre] = [Clase]([argumentos]);
 def p_declaracion_objeto(p):
     '''declaracion : ID ID ASIGNACION expresion PUNTO_COMA'''
+    declarar(p[2], p[1])
 #fin aporte Marcia Torres
 parser = yacc.yacc()
