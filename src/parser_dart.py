@@ -132,6 +132,12 @@ def p_constante(p):
                 | CONST ID ASIGNACION expresion PUNTO_COMA
                 | FINAL tipo ID ASIGNACION expresion PUNTO_COMA
                 | FINAL ID ASIGNACION expresion PUNTO_COMA'''
+    # Se registra como no modificable
+    if len(p) == 7:
+        declarar(p[3], p[2], mutable=False)
+    else:
+        declarar(p[2], p[4], mutable=False)
+
     #fin aporte Mathias Giler
 
 #Inicio aporte Juan Ayala: Expresiones aritméticas
@@ -234,6 +240,8 @@ def p_for_inicio(p):
     '''for_inicio : tipo ID ASIGNACION expresion
                   | VAR ID ASIGNACION expresion
                   | ID ASIGNACION expresion'''
+    if len(p) == 5:
+        declarar(p[2], p[4] if p[1] == 'var' else p[1])
 
 def p_for_actualizacion(p):
     '''for_actualizacion : ID INCREMENTO
@@ -289,6 +297,7 @@ def p_declaracion_record(p):
 
 def p_record(p):
     '''record : tipo_record ID ASIGNACION expresion PUNTO_COMA'''
+    declarar(p[2], 'Record')
 
 def p_tipo_record(p):
     '''tipo_record : PARENTESIS_IZQ tipo COMA lista_tipos PARENTESIS_DER'''
@@ -300,6 +309,7 @@ def p_lista_tipos(p):
 # Valor de una tupla: necesita al menos 2 elementos; con uno solo es una expresión entre paréntesis
 def p_expresion_record(p):
     '''expresion : PARENTESIS_IZQ expresion COMA elementos PARENTESIS_DER'''
+    p[0] = 'Record'
     #fin aporte Mathias Giler
 
 #Declaraciones de funciones
@@ -350,10 +360,18 @@ def p_declaracion_return(p):
 def p_declaracion_funcion_void(p):
     '''declaracion : funcion_void'''
 
+# La cabecera se separa del cuerpo para que se reduzca antes de leer el cuerpo:
+# así, al encontrar un return dentro, ya se sabe que la función es void
 def p_funcion_void(p):
-    '''funcion_void : VOID ID PARENTESIS_IZQ parametros PARENTESIS_DER cuerpo_base
-                    | VOID ID PARENTESIS_IZQ PARENTESIS_DER cuerpo_base'''
+    '''funcion_void : cabecera_void cuerpo_base'''
+    pila_funciones.pop()
 
+def p_cabecera_void(p):
+    '''cabecera_void : VOID ID PARENTESIS_IZQ parametros PARENTESIS_DER
+                     | VOID ID PARENTESIS_IZQ PARENTESIS_DER'''
+    tabla_funciones[p[2]] = 'void'
+    pila_funciones.append('void')
+    
 # Regla: llamada a función o método como instrucción
 def p_declaracion_llamada(p):
     '''declaracion : expresion PUNTO_COMA'''
@@ -363,6 +381,9 @@ def p_expresion_metodo(p):
     '''expresion : expresion PUNTO ID PARENTESIS_IZQ elementos PARENTESIS_DER
                  | expresion PUNTO ID PARENTESIS_IZQ PARENTESIS_DER
                  | expresion PUNTO ID'''
+    conversiones = {'toInt': 'int', 'toDouble': 'double', 'toString': 'String'}
+    p[0] = conversiones.get(p[3]) if len(p) > 4 else None
+
     #fin aporte Mathias Giler
 
 #Inicio aporte Mathias Giler: Impresión, solicitud de datos
@@ -382,13 +403,17 @@ def p_declaracion_import(p):
 
 def p_expresion_lectura(p):
     '''expresion : STDIN PUNTO ID PARENTESIS_IZQ PARENTESIS_DER'''
+    p[0] = 'String?'
 
 # Tipo que acepta null (String?, int?) y el valor null
 def p_tipo_nullable(p):
     '''tipo : tipo SIGNO_PREGUNTA'''
+    p[0] = p[1] + '?'
 
 def p_expresion_null(p):
     '''expresion : NULL'''
+    p[0] = 'null'
+
     #fin aporte Mathias Giler
 
 #Inicio aporte Marcia Torres: Clases, propiedades y métodos
