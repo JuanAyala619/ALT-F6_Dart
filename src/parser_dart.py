@@ -59,6 +59,11 @@ def p_expresion_id(p):
         p[0] = simbolo['tipo']
     else:
         p[0] = None
+    # Regla semántica (Marcia Torres) - Identificadores:
+    # una variable debe estar declarada antes de usarse
+    if simbolo is None:
+        error_semantico(p.lineno(1), 'Identificadores',
+                        f"la variable '{p[1]}' se usa antes de ser declarada")
 
 def p_expresion_agrupada(p):
     '''expresion : PARENTESIS_IZQ expresion PARENTESIS_DER
