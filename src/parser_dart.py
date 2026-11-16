@@ -3,7 +3,31 @@ from lexer_dart import tokens
 
 errores_sintacticos = []
 start = 'programa'
+#Inicio aporte Juan Ayala: base analizador semántico
+tabla_simbolos = {}
+tabla_funciones = {}
+pila_funciones = []
+errores_semanticos = []
+def reiniciar_semantico():
+    tabla_simbolos.clear()
+    tabla_funciones.clear()
+    pila_funciones.clear()
+    errores_semanticos.clear()
 
+def error_semantico(linea, categoria, mensaje):
+    errores_semanticos.append((linea, categoria, mensaje))
+
+def declarar(nombre, tipo, mutable=True):
+    tabla_simbolos[nombre] = {'tipo': tipo, 'mutable': mutable}
+
+def tipo_base(tipo):
+    if isinstance(tipo, str):
+        while len(tipo) > 0 and tipo[-1] == '?':
+            tipo = tipo[:-1]
+        return tipo
+    else:
+        return None
+#fin aporte Juan Ayala
 def p_programa(p):
     '''programa : declaraciones'''
 
@@ -16,16 +40,34 @@ def p_tipo(p):
             | DOUBLE
             | STRING
             | BOOL'''
+    p[0]=p[1]
 
 def p_expresion(p):
     '''expresion : ENTERO
                 | DECIMAL
                 | CADENA
                 | TRUE
-                | FALSE
-                | ID
-                | PARENTESIS_IZQ expresion PARENTESIS_DER
+                | FALSE'''
+    tipos = {'ENTERO': 'int', 'DECIMAL': 'double', 'CADENA': 'String',
+             'TRUE': 'bool', 'FALSE': 'bool'}
+    p[0] = tipos[p.slice[1].type]
+
+def p_expresion_id(p):
+    '''expresion : ID'''
+    simbolo = tabla_simbolos.get(p[1])
+    if simbolo is not None:
+        p[0] = simbolo['tipo']
+    else:
+        p[0] = None
+
+def p_expresion_agrupada(p):
+    '''expresion : PARENTESIS_IZQ expresion PARENTESIS_DER
                 | operacion_aritmetica'''
+    if len(p) == 4:
+        p[0] = p[2]
+    else:
+        p[0] = p[1]
+
 def p_cuerpo_base(p):
     '''cuerpo_base : LLAVE_IZQ declaraciones LLAVE_DER
                 | LLAVE_IZQ LLAVE_DER'''
@@ -48,6 +90,7 @@ precedence = (
 )
 def p_expresion_menos_unario(p):
     '''expresion : RESTA expresion %prec UMENOS'''
+    p[0] = p[2]
 # fin aporte Juan Ayala
 #Declaración de variables
     #Inicio aporte Juan Ayala: Tipado explícito
@@ -57,6 +100,7 @@ def p_declaracion_tipado_explicito(p):
 def p_tipado_explicito(p):
     '''tipado_explicito : tipo ID ASIGNACION expresion PUNTO_COMA
                         | tipo ID PUNTO_COMA'''
+    declarar(p[2], p[1])
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres (marciatorresg): Tipado inferido
 # Regla: declaración con tipado inferido
@@ -183,13 +227,26 @@ def p_declaracion_lista(p):
 def p_lista(p):
     '''lista : previo_asignacion CORCHETE_IZQ elementos CORCHETE_DER PUNTO_COMA
                 | previo_asignacion CORCHETE_IZQ CORCHETE_DER PUNTO_COMA'''
+
 def p_previo_asignacion(p):
     '''previo_asignacion : LIST MENOR_QUE tipo MAYOR_QUE ID ASIGNACION'''
+    declarar(p[5], f'List<{p[3]}>')
+
 def p_elementos(p):
     '''elementos : expresion
                 | elementos COMA expresion'''  
+
 def p_expresion_acceso_lista(p):
     '''expresion : ID CORCHETE_IZQ expresion CORCHETE_DER'''      
+    simbolo = tabla_simbolos.get(p[1])
+    if simbolo is not None:
+        tipo = simbolo['tipo']
+    else:
+        tipo = None
+    if tipo is not None and tipo[0:5] == 'List<':
+        p[0]= tipo[5:-1]
+    else:
+        p[0] = None
 
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres: Conjuntos
@@ -229,17 +286,29 @@ def p_expresion_record(p):
     #Inicio aporte Juan Ayala: Lambda
 def p_declaracion_lambda(p):
     '''declaracion : lambda'''
+
 def p_lambda(p):
     '''lambda : tipado_comun FLECHA expresion PUNTO_COMA'''
+    pila_funciones.pop()
+
 def p_tipado_comun(p):
     '''tipado_comun : tipo ID PARENTESIS_IZQ parametros PARENTESIS_DER
                     | tipo ID PARENTESIS_IZQ PARENTESIS_DER'''
+    tabla_funciones[p[2]] = p[1]
+    pila_funciones.append(p[1])
+    
 def p_parametros(p):
     '''parametros : tipo ID 
                 | parametros COMA tipo ID'''
+    if len(p)==3:
+        declarar(p[2], p[1])
+    else:
+        declarar(p[4], p[3])
+
 def p_expresion_llamada_funcion(p):
     '''expresion : ID PARENTESIS_IZQ elementos PARENTESIS_DER
                  | ID PARENTESIS_IZQ PARENTESIS_DER'''
+    p[0] = tabla_funciones.get(p[1])
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres: Función con retorno
 # Regla: función con retorno
