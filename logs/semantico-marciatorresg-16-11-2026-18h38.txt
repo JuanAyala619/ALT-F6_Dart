@@ -1,0 +1,6 @@
+Archivo: algoritmos/algoritmo_marcia.dart
+Usuario: marciatorresg
+
+No se encontraron errores semánticos.
+
+Errores semánticos: 0

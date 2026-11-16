@@ -1,0 +1,9 @@
+Archivo: algoritmos/algoritmo_marcia_semantico_errores.dart
+Usuario: marciatorresg
+
+Error semántico (Identificadores) en línea 7: la variable 'bonus' se usa antes de ser declarada
+Error semántico (Identificadores) en línea 8: la variable 'apellido' se usa antes de ser declarada
+Error semántico (Operaciones permitidas) en línea 10: no se puede aplicar '*' entre 'String' y 'int'
+Error semántico (Operaciones permitidas) en línea 11: no se puede aplicar '+' entre 'int' y 'bool'
+
+Errores semánticos: 4
