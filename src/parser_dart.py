@@ -115,11 +115,14 @@ def p_declaracion_tipado_inferido(p):
 def p_tipado_inferido(p):
     '''tipado_inferido : VAR ID ASIGNACION expresion PUNTO_COMA
                        | VAR ID PUNTO_COMA'''
+    # var toma el tipo del valor que se le asigna
+    declarar(p[2], p[4] if len(p) == 6 else None)
 
 # Regla: declaración con inicialización tardía
 #   late [tipo] [nombre];
 def p_declaracion_late(p):
     '''declaracion : LATE tipo ID PUNTO_COMA'''
+    declarar(p[3], p[2])
 
 # Regla: asignación si es null
 #   [nombre] ??= [valor];
@@ -192,17 +195,20 @@ def p_expresion_relacional(p):
                  | expresion MAYOR_IGUAL expresion
                  | expresion IGUAL expresion
                  | expresion DIFERENTE expresion'''
+    p[0] = 'bool'
 
 # Regla: conectores lógicos (uno o más)
 #   [condición_1] && [condición_2] || [condición_3]
 def p_expresion_logica(p):
     '''expresion : expresion AND expresion
                  | expresion OR expresion'''
+    p[0] = 'bool'
 
 # Regla: negación
 #   ![condición]
 def p_expresion_not(p):
     '''expresion : NOT expresion'''
+    p[0] = 'bool'
 #fin aporte Marcia Torres
 
 #Estructuras de Control
@@ -296,8 +302,9 @@ def p_declaracion_conjunto(p):
 def p_conjunto(p):
     '''conjunto : SET MENOR_QUE tipo MAYOR_QUE ID ASIGNACION LLAVE_IZQ elementos LLAVE_DER PUNTO_COMA
                 | SET MENOR_QUE tipo MAYOR_QUE ID ASIGNACION LLAVE_IZQ LLAVE_DER PUNTO_COMA'''
+    declarar(p[5], f'Set<{p[3]}>')
     #fin aporte Marcia Torres
-    
+
     #Inicio aporte Mathias Giler: Tuplas/Records
 
 # Regla: tuplas / records
@@ -359,6 +366,7 @@ def p_declaracion_funcion_retorno(p):
 
 def p_funcion_retorno(p):
     '''funcion_retorno : tipado_comun cuerpo_base'''
+    pila_funciones.pop()
 
 def p_declaracion_return(p):
     '''declaracion : RETURN expresion PUNTO_COMA
@@ -471,5 +479,6 @@ def p_expresion_this(p):
 #   [Clase] [nombre] = [Clase]([argumentos]);
 def p_declaracion_objeto(p):
     '''declaracion : ID ID ASIGNACION expresion PUNTO_COMA'''
+    declarar(p[2], p[1])
 #fin aporte Marcia Torres
 parser = yacc.yacc()
