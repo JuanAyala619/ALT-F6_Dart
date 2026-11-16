@@ -363,6 +363,11 @@ def p_funcion_retorno(p):
 def p_declaracion_return(p):
     '''declaracion : RETURN expresion PUNTO_COMA
                    | RETURN PUNTO_COMA'''
+    # Regla semántica (Mathias Giler) Retorno de funciones
+    # una función de tipo void no puede devolver un valor
+    if len(p) == 4 and pila_funciones and pila_funciones[-1] == 'void':
+        error_semantico(p.lineno(1), 'Retorno de funciones',
+                        'una función de tipo void no puede retornar un valor')
     #fin aporte Marcia Torres
 
     #Inicio aporte Mathias Giler: Función sin retorno
