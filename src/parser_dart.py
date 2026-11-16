@@ -101,6 +101,10 @@ def p_tipado_explicito(p):
     '''tipado_explicito : tipo ID ASIGNACION expresion PUNTO_COMA
                         | tipo ID PUNTO_COMA'''
     declarar(p[2], p[1])
+    if len(p) == 6:
+        # Regla semántica (Mathias Giler) - Conversión
+        verificar_conversion(p[1], p[4], p[2], p.lineno(2))
+
     #fin aporte Juan Ayala
     #Inicio aporte Marcia Torres (marciatorresg): Tipado inferido
 # Regla: declaración con tipado inferido
@@ -132,12 +136,18 @@ def p_constante(p):
                 | CONST ID ASIGNACION expresion PUNTO_COMA
                 | FINAL tipo ID ASIGNACION expresion PUNTO_COMA
                 | FINAL ID ASIGNACION expresion PUNTO_COMA'''
-    # Se registra como no modificable
     if len(p) == 7:
         declarar(p[3], p[2], mutable=False)
+        verificar_conversion(p[2], p[5], p[3], p.lineno(3))
     else:
         declarar(p[2], p[4], mutable=False)
 
+def verificar_conversion(tipo_destino, tipo_valor, nombre, linea):
+    if tipo_base(tipo_destino) == 'int' and tipo_base(tipo_valor) == 'double':
+        error_semantico(linea, 'Conversión',
+                        f"no se puede asignar un double a '{nombre}' de tipo int "
+                        f"sin conversión explícita. Usa .toInt() o ~/")
+        
     #fin aporte Mathias Giler
 
 #Inicio aporte Juan Ayala: Expresiones aritméticas
@@ -371,7 +381,7 @@ def p_cabecera_void(p):
                      | VOID ID PARENTESIS_IZQ PARENTESIS_DER'''
     tabla_funciones[p[2]] = 'void'
     pila_funciones.append('void')
-    
+
 # Regla: llamada a función o método como instrucción
 def p_declaracion_llamada(p):
     '''declaracion : expresion PUNTO_COMA'''
