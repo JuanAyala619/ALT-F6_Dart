@@ -1,0 +1,6 @@
+Archivo: algoritmos/algoritmo_juan_2.dart
+Usuario: JuanAyala619
+
+No se encontraron errores semánticos.
+
+Errores semánticos: 0

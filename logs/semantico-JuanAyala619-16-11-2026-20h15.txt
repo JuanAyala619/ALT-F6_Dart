@@ -1,0 +1,13 @@
+Archivo: algoritmos/algoritmo_juan_semantico_errores.dart
+Usuario: JuanAyala619
+
+Error semántico (Asignación de tipo) en línea 10: 'maximo' es const o final y no se puede modificar
+Error semántico (Asignación de tipo) en línea 11: 'tasa' es const o final y no se puede modificar
+Error semántico (Asignación de tipo) en línea 13: 'saludo' es const o final y no se puede modificar
+Error semántico (Asignación de tipo) en línea 14: 'bienvenida' es const o final y no se puede modificar
+Error semántico (Asignación de tipo) en línea 18: 'saludo' es const o final y no se puede modificar
+Error semántico (Estructuras de control) en línea 16: la condición del while debe ser bool, se encontró 'String'
+Error semántico (Estructuras de control) en línea 21: la condición del if debe ser bool, se encontró 'int'
+Error semántico (Asignación de tipo) en línea 30: 'verdadero' es const o final y no se puede modificar
+
+Errores semánticos: 8
