@@ -1,0 +1,9 @@
+Archivo: algoritmos/algoritmo_mathias_semantico_errores.dart
+Usuario: matheoglg
+
+Error semántico (Conversión) en línea 3: no se puede asignar un double a 'entero' de tipo int sin conversión explícita. Usa .toInt() o ~/
+Error semántico (Conversión) en línea 4: no se puede asignar un double a 'mitad' de tipo int sin conversión explícita. Usa .toInt() o ~/
+Error semántico (Conversión) en línea 5: no se puede asignar un double a 'maximo' de tipo int sin conversión explícita. Usa .toInt() o ~/
+Error semántico (Retorno de funciones) en línea 11: una función de tipo void no puede retornar un valor
+
+Errores semánticos: 4
