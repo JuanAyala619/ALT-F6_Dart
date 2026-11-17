@@ -1,0 +1,6 @@
+Archivo: algoritmos/algoritmo_mathias.dart
+Usuario: matheoglg
+
+No se encontraron errores semánticos.
+
+Errores semánticos: 0
