@@ -7,7 +7,7 @@ from tkinter import ttk
 
 from interfaz import tema
 from interfaz.analizador import FASES, NOMBRE_FASE
-
+from interfaz.editor import Editor
 
 class DartLens(tk.Tk):
     def __init__(self):
@@ -145,7 +145,8 @@ class DartLens(tk.Tk):
     # ------------------------------------------------------------------ componentes
     def _crear_componentes(self):
         # Editor de código (Juan Ayala)
-        self._pendiente(self.zona_editor, "Editor de código: pendiente")
+        self.editor = Editor(self.zona_editor, self)
+        self.editor.pack(fill="both", expand=True)
         # Fases de análisis (Juan Ayala)
         self._pendiente(self.zona_controles, "Fases de análisis: pendiente")
         # Resultados (Marcia Torres)
