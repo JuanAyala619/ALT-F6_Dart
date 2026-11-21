@@ -8,6 +8,7 @@ from tkinter import ttk
 from interfaz import tema
 from interfaz.analizador import FASES, NOMBRE_FASE
 from interfaz.editor import Editor
+from interfaz.controles import PanelFases
 
 class DartLens(tk.Tk):
     def __init__(self):
@@ -148,7 +149,8 @@ class DartLens(tk.Tk):
         self.editor = Editor(self.zona_editor, self)
         self.editor.pack(fill="both", expand=True)
         # Fases de análisis (Juan Ayala)
-        self._pendiente(self.zona_controles, "Fases de análisis: pendiente")
+        self.controles = PanelFases(self.zona_controles, self)
+        self.controles.pack(fill="x")
         # Resultados (Marcia Torres)
         self._pendiente(self.zona_resultados, "Resultados: pendiente")
 
