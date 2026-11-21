@@ -9,6 +9,7 @@ from interfaz import tema
 from interfaz.analizador import FASES, NOMBRE_FASE
 from interfaz.editor import Editor
 from interfaz.controles import PanelFases
+from interfaz.resultados import PanelResultados
 
 class DartLens(tk.Tk):
     def __init__(self):
@@ -152,7 +153,8 @@ class DartLens(tk.Tk):
         self.controles = PanelFases(self.zona_controles, self)
         self.controles.pack(fill="x")
         # Resultados (Marcia Torres)
-        self._pendiente(self.zona_resultados, "Resultados: pendiente")
+        self.resultados = PanelResultados(self.zona_resultados, self)
+        self.resultados.pack(fill="both", expand=True)
 
     # ------------------------------------------------------------------ acciones comunes
     def usuario(self):
