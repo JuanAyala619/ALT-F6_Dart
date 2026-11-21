@@ -6,6 +6,7 @@ from tkinter import ttk
 
 from interfaz import tema
 from interfaz.analizador import FASES, NOMBRE_FASE
+from interfaz.pestana_log import PestanaLog
 
 
 class PanelResultados(tk.Frame):
@@ -23,6 +24,8 @@ class PanelResultados(tk.Frame):
         self._crear_pestana_tokens()
         self._crear_pestana_errores()
         # Pestaña Log (Marcia Torres, commit 2)
+        self.tab_log = PestanaLog(self.pestanas, app)
+        self.pestanas.add(self.tab_log, text="Log")
         self.limpiar()
 
     # ------------------------------------------------------------------ pestaña Tokens
@@ -203,4 +206,16 @@ class PanelResultados(tk.Frame):
                      "con su línea y categoría.", bg=tema.EXITO_SUAVE, fg=tema.EXITO)
             self.pestanas.select(self.tab_tokens)
         # Actualizar log (Marcia Torres, commit 2)
+        self.tab_log.mostrar(sesion)
+
+    def ver_log(self):
+        self.pestanas.select(self.tab_log)
+
+    def abrir_dialogo_guardar(self):
+        self.ver_log()
+        self.tab_log.abrir_dialogo()
+
+    @property
+    def dialogo(self):
+        return self.tab_log.dialogo
 # Fin aporte Marcia Torres
